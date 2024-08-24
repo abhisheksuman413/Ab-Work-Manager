@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "65307924323",
+    "project_id": "ab-work-manager",
+    "storage_bucket": "ab-work-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65307924323:android:fa89b7c27324e5b9eca556",
+        "android_client_info": {
+          "package_name": "com.fps69.abworkmanager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxBs0dLl0O3SZ4ynYsrtUil3gUNZgmqbc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
