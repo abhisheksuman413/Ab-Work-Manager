@@ -49,6 +49,7 @@ class SignUpActivity : AppCompatActivity() {
             }
             tvSignIn.setOnClickListener {
                 startActivity(Intent(this@SignUpActivity,SignInActivity::class.java))
+                finish()
             }
         }
 
