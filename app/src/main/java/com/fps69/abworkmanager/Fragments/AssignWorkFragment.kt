@@ -9,9 +9,6 @@ import com.fps69.abworkmanager.R
 
 
 class AssignWorkFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

@@ -9,10 +9,6 @@ import androidx.navigation.fragment.findNavController
 import com.fps69.abworkmanager.R
 import com.fps69.abworkmanager.databinding.FragmentWorksBinding
 
-// TODO: Rename parameter arguments, choose names that match
-
-
-
 class WorksFragment : Fragment() {
 
     private lateinit var binding:FragmentWorksBinding
