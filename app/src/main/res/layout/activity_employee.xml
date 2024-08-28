@@ -7,6 +7,18 @@
     android:layout_height="match_parent"
     tools:context=".EmployeeActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tbEmployeeAllWorks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/HardBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/toolbar_menu"
+        app:title="All Works"
+        app:titleTextColor="@color/white" />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"

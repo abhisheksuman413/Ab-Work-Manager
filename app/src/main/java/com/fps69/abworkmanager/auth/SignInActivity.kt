@@ -58,46 +58,54 @@ class SignInActivity : AppCompatActivity() {
             try {
                 val authResult = firebaseAuth.signInWithEmailAndPassword(email,password).await()
                 val currentUser = authResult.user?.uid
-                if(currentUser!= null){
-                    // Check user Boss Or Employee
-                    FirebaseDatabase.getInstance().getReference("User").child(currentUser).addListenerForSingleValueEvent(object :ValueEventListener{
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            val currentUserData = snapshot.getValue(User::class.java)
-                            if (currentUserData != null) {
-                                when(currentUserData.userType){
-                                    "Boss"->{
-                                        // Open Boss layout
-                                        startActivity(Intent(this@SignInActivity,BossActivity::class.java))
-                                        finish()
-                                    }
-                                    "Employee"->{
-                                        // Open Employee layout
-                                        startActivity(Intent(this@SignInActivity,EmployeeActivity::class.java))
-                                        finish()
-                                    }
-                                    else->{
-                                        //Open Employee layout
-                                        startActivity(Intent(this@SignInActivity,BossActivity::class.java))
-                                        finish()
+                val verifyEmail = firebaseAuth.currentUser?.isEmailVerified
+                if(verifyEmail==true){
+                    if(currentUser!= null){
+                        // Check user Boss Or Employee
+                        FirebaseDatabase.getInstance().getReference("User").child(currentUser).addListenerForSingleValueEvent(object :ValueEventListener{
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val currentUserData = snapshot.getValue(User::class.java)
+                                if (currentUserData != null) {
+                                    when(currentUserData.userType){
+                                        "Boss"->{
+                                            // Open Boss layout
+                                            startActivity(Intent(this@SignInActivity,BossActivity::class.java))
+                                            finish()
+                                        }
+                                        "Employee"->{
+                                            // Open Employee layout
+                                            startActivity(Intent(this@SignInActivity,EmployeeActivity::class.java))
+                                            finish()
+                                        }
+                                        else->{
+                                            //Open Employee layout
+                                            startActivity(Intent(this@SignInActivity,BossActivity::class.java))
+                                            finish()
+                                        }
                                     }
                                 }
+                                else{
+                                    Utils.showToast(this@SignInActivity,"Current user data is null")
+                                }
                             }
-                            else{
-                                Utils.showToast(this@SignInActivity,"Current user data is null")
+
+                            override fun onCancelled(error: DatabaseError) {
+                                Utils.hideDialog()
+                                Utils.showToast(this@SignInActivity, "Error due to ${error.message}")
                             }
-                        }
 
-                        override fun onCancelled(error: DatabaseError) {
-                            Utils.hideDialog()
-                            Utils.showToast(this@SignInActivity, "Error due to ${error.message}")
-                        }
-
-                    })
+                        })
+                    }
+                    else{
+                        Utils.hideDialog()
+                        Utils.showToast(this@SignInActivity, " User not found Please Sign Up first ")
+                    }
                 }
                 else{
                     Utils.hideDialog()
-                    Utils.showToast(this@SignInActivity, " User not found Please Sign Up first ")
+                    Utils.showToast(this@SignInActivity, " Email id not verified Please verify your email ")
                 }
+
             }catch (e:Exception){
                 Utils.hideDialog()
                 Utils.showToast(this@SignInActivity, " Something went wrong :- ${e.message!!}")
