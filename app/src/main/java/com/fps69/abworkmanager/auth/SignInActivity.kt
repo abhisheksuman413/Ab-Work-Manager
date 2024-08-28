@@ -3,7 +3,9 @@ package com.fps69.abworkmanager.auth
 import android.content.Intent
 import android.icu.util.UniversalTimeScale
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -12,6 +14,7 @@ import com.fps69.abworkmanager.BossActivity
 import com.fps69.abworkmanager.EmployeeActivity
 import com.fps69.abworkmanager.R
 import com.fps69.abworkmanager.databinding.ActivitySignInBinding
+import com.fps69.abworkmanager.databinding.ForgotPasswordDialogBinding
 import com.fps69.abworkmanager.dataclass.User
 import com.fps69.abworkmanager.utils.Utils
 import com.google.firebase.auth.FirebaseAuth
@@ -47,8 +50,40 @@ class SignInActivity : AppCompatActivity() {
                 startActivity(Intent(this@SignInActivity,SignUpActivity::class.java))
                 finish()
             }
+            tvForgotPassword.setOnClickListener {
+                showForgotPasswordDialog()
+            }
         }
 
+    }
+
+    private fun showForgotPasswordDialog() {
+        val dialog = ForgotPasswordDialogBinding.inflate(LayoutInflater.from(this@SignInActivity))
+        val alertDialog = AlertDialog.Builder(this@SignInActivity)
+            .setView(dialog.root)
+            .create()
+        alertDialog.show()
+        dialog.etEmail.requestFocus()
+        dialog.tvBackToLogin.setOnClickListener {
+            alertDialog.dismiss()
+        }
+        dialog.btnForgotPassword.setOnClickListener {
+            val email =dialog.etEmail.text.toString()
+            alertDialog.dismiss()
+            resetPassword(email)
+        }
+    }
+
+    private fun resetPassword(email: String) {
+        lifecycleScope.launch {
+            try {
+                FirebaseAuth.getInstance().sendPasswordResetEmail(email).await()
+                Utils.showToast(this@SignInActivity," Please check your Gmail and reset your password")
+            }
+            catch (e:Exception){
+                Utils.showToast(this@SignInActivity,"Something went wrong :- ${e.message.toString()}")
+            }
+        }
     }
 
     private fun loginUser(email: String, password: String) {

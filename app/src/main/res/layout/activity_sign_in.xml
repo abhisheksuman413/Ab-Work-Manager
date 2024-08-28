@@ -102,7 +102,7 @@
         android:layout_marginHorizontal="20.80dp"
         android:backgroundTint="@color/HardBlue"
         android:letterSpacing="0.1"
-        android:text="SignUp"
+        android:text="Sign In"
         android:textAllCaps="false"
         android:textSize="20sp"
         android:textStyle="bold"
