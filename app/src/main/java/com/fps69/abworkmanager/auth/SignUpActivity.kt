@@ -91,13 +91,15 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun uplodeUserData(name: String, email: String, password: String) {
-        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid.toString()
-        val storageReference =
-            FirebaseStorage.getInstance().getReference("profile").child(currentUserId)
-                .child("profile.jpg")
-
         lifecycleScope.launch {
             try {
+                val firebaseAuth =
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                        .await()
+                val currentUserId = FirebaseAuth.getInstance().currentUser?.uid.toString()
+                val storageReference =
+                    FirebaseStorage.getInstance().getReference("profile").child(currentUserId)
+                        .child("profile.jpg")
                 val uploadTask = storageReference.putFile(userImageUri!!).await()
                 if (uploadTask.task.isSuccessful) {
                     val downlodeUrl = storageReference.downloadUrl.await()
@@ -119,10 +121,8 @@ class SignUpActivity : AppCompatActivity() {
 
 
             try {
-                val firebaseAuth =
-                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                        .await()
-                if (firebaseAuth.user != null) {
+                val CurrentUser = FirebaseAuth.getInstance().currentUser
+                if (CurrentUser != null) {
                     //For Email Verification
                     FirebaseAuth.getInstance().currentUser?.sendEmailVerification()
                         ?.addOnSuccessListener {
@@ -144,10 +144,18 @@ class SignUpActivity : AppCompatActivity() {
                                 this@SignUpActivity.finish()
                             }
                         }
-                    val uId = firebaseAuth.user?.uid.toString()
+                    val uId = CurrentUser.uid.toString()
                     val saveUseType = if (userType == "Boss") "Boss" else "Employee"
-                    val user = User(saveUseType, uId, name, email, password, downlodeUrl.toString())
+                    val user = User(
+                        userType = saveUseType,
+                        userId = uId,
+                        userName = name,
+                        userEmail = email,
+                        userPassword = password,
+                        userImage = downlodeUrl.toString()
+                    )
                     db.child(uId).setValue(user).await()
+                    FirebaseAuth.getInstance().signOut()
                     Utils.showToast(this@SignUpActivity, "SignUp Successfully")
 
                 } else {

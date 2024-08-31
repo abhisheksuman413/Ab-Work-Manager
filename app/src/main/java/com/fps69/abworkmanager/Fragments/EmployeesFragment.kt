@@ -8,16 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.fps69.abworkmanager.Adapter.EmployeeListAdapter
 import com.fps69.abworkmanager.R
 import com.fps69.abworkmanager.auth.SignInActivity
 import com.fps69.abworkmanager.databinding.FragmentEmployeesBinding
+import com.fps69.abworkmanager.dataclass.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 
 
 class EmployeesFragment : Fragment() {
 
     private lateinit var binding: FragmentEmployeesBinding
+    private lateinit var employeeListAdapter: EmployeeListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,20 +39,68 @@ class EmployeesFragment : Fragment() {
         // Inflate the layout for this fragment
         binding= FragmentEmployeesBinding.inflate(layoutInflater)
 
-        binding.tbEmployees.setOnMenuItemClickListener{
-            when(it.itemId){
-                R.id.logOut->{
-                    showLogoutDialog()
-                    true
+
+
+
+        binding.apply {
+            tbEmployees.setOnMenuItemClickListener {
+                when(it.itemId){
+                    R.id.logOut->{
+                        showLogoutDialogForLogOut()
+                        true
+                    }
+                    else -> false
                 }
-                else -> false
             }
+
+
         }
+
+        prepareRecyclerViewForEmployeeListAdapter()
+        showAllEmployeeList()
+
+
+
+
+
 
         return binding.root
     }
 
-    private fun showLogoutDialog(){
+    // This function is for fetch employee list from firebase
+    private fun showAllEmployeeList() {
+        FirebaseDatabase.getInstance().getReference("User").addValueEventListener(object:ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val EmployeeList = arrayListOf<User>()
+                for(employee in snapshot.children){
+                    val currentUser = employee.getValue(User::class.java)
+                    if(currentUser?.userType == "Employee"){
+                        EmployeeList.add(currentUser)
+                    }
+                }
+                employeeListAdapter.differ.submitList(EmployeeList)  // Yha adapter me data pass kr rhe hai
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
+    }
+
+
+    // This function is for prepare recycler view for employee list adapter
+    private fun prepareRecyclerViewForEmployeeListAdapter(){
+        employeeListAdapter = EmployeeListAdapter()
+        binding.rvEmployeeList.apply {
+            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+            adapter= employeeListAdapter
+        }
+    }
+
+
+
+    private fun showLogoutDialogForLogOut(){
         val builder = AlertDialog.Builder(requireContext())
         val alertDialog = builder.create()
         builder.setTitle("Log Out")
