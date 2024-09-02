@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.gms.google-services")
+    // Plugins for safe arguments to pass data between one fragment to another
+    id("androidx.navigation.safeargs.kotlin")
+    id("kotlin-parcelize")   // for parcelize --> for making data class parcelable
 }
 
 android {

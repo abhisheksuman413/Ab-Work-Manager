@@ -1,7 +1,10 @@
 package com.fps69.abworkmanager.dataclass
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
+@Parcelize
 data class User(
     val id : String = UUID.randomUUID().toString(),
     val userType:String?=null,
@@ -10,4 +13,4 @@ data class User(
     val userEmail:String?=null,
     val userPassword:String?=null,
     val userImage:String?=null
-)
+): Parcelable

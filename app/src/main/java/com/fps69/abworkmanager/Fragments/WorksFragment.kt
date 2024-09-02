@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.fps69.abworkmanager.R
 import com.fps69.abworkmanager.databinding.FragmentWorksBinding
 
 class WorksFragment : Fragment() {
 
-    private lateinit var binding:FragmentWorksBinding
+    // Creating variable for employee Details
+    val employeeDetail by navArgs<WorksFragmentArgs>()
+    private lateinit var binding: FragmentWorksBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,10 +27,24 @@ class WorksFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
 
-        binding=  FragmentWorksBinding.inflate(layoutInflater)
+        binding = FragmentWorksBinding.inflate(layoutInflater)
 
-        binding.tv2.setOnClickListener {
-            findNavController().navigate(R.id.action_worksFragment_to_assignWorkFragment)
+
+
+        // Fetching Employee Name
+        val employeeName = employeeDetail.employeeData.userName
+
+        binding.apply {
+            tbEmployeeAllWorks.apply {
+                title = employeeName
+                setNavigationOnClickListener {
+                    activity?.onBackPressed()
+                }
+            }
+            btnAssignWork.setOnClickListener {
+                val action = WorksFragmentDirections.actionWorksFragmentToAssignWorkFragment(employeeDetail.employeeData)
+                findNavController().navigate(action)
+            }
         }
 
         return binding.root

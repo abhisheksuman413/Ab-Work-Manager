@@ -7,15 +7,39 @@
     tools:context=".Fragments.WorksFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/tv2"
-        android:layout_width="wrap_content"
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tbEmployeeAllWorks"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Work Fragment "
-        android:textSize="34sp"
+        android:background="@color/HardBlue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:navigationIcon="@drawable/baseline_arrow_back_24"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Employee Work "
+        app:titleTextColor="#FFFFFF" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reWork"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tbEmployeeAllWorks" />
+
+   <com.google.android.material.floatingactionbutton.FloatingActionButton
+       android:id="@+id/btnAssignWork"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_margin="21dp"
+       android:backgroundTint="@color/HardBlue"
+       app:tint="#FFFFFF"
+       android:layout_gravity="bottom|end"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       android:src="@drawable/done_icon"
+       />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,18 +11,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/_8sdp">
+       >
 
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivEmployeeItemImage"
             android:layout_width="@dimen/_50sdp"
             android:layout_height="@dimen/_50sdp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/profilepic"
-            app:shapeAppearanceOverlay="@style/roundImageViewRounded" />
+            app:shapeAppearanceOverlay="@style/roundImageViewRounded"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
         
         
         <TextView

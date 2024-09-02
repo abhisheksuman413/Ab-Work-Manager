@@ -2,10 +2,13 @@ package com.fps69.abworkmanager.Adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.fps69.abworkmanager.Fragments.EmployeesFragmentDirections
+import com.fps69.abworkmanager.R
 import com.fps69.abworkmanager.databinding.ItemEmployeeListBinding
 import com.fps69.abworkmanager.dataclass.User
 
@@ -40,6 +43,14 @@ class EmployeeListAdapter:RecyclerView.Adapter<EmployeeListAdapter.EmployeeListV
         holder.binding.apply {
             Glide.with(holder.itemView).load(empData.userImage).into(ivEmployeeItemImage)
             tvEmployeeItemName.text  = empData.userName
+        }
+        holder.itemView.setOnClickListener {
+              // ye navigation ke liye use kr rhe the jb Data pass nhi krna tha
+//            Navigation.findNavController(it).navigate(R.id.action_employeesFragment_to_worksFragment)
+
+            // Jb Data pass krna hai dusre fragment me to ye use kr rhe hai
+            val action = EmployeesFragmentDirections.actionEmployeesFragmentToWorksFragment(empData)
+            Navigation.findNavController(it).navigate(action)
         }
     }
 }
