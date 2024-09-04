@@ -40,9 +40,6 @@ class EmployeesFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentEmployeesBinding.inflate(layoutInflater)
 
-
-
-// knncn bb cbu buoxb cb bucb juc jbu cpi hpihsb ouxsj   ud  uhxs uogx
         binding.apply {
             tbEmployees.setOnMenuItemClickListener {
                 when (it.itemId) {
@@ -118,6 +115,13 @@ class EmployeesFragment : Fragment() {
             }
             .show()
             .setCancelable(false)
+            /*
+            >>> Prevents Dismissal by Back Button or Touching Outside: When you set
+                .setCancelable(false), it means the dialog cannot be dismissed by the
+                 user pressing the back button or by touching anywhere outside the dialog
+                 area. The only way to dismiss the dialog in this case is by interacting w
+                 ith one of the buttons provided within the dialog (e.g., "Yes" or "No" in
+                 your case).*/
 
     }
 

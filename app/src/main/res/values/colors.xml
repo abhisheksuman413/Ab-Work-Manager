@@ -9,5 +9,8 @@
     <color name="Light3">#00b4d8</color>
     <color name="Light4">#90e0ef</color>
     <color name="Light5">#caf0f8</color>
+    <color name="red">#FF0000</color>
+    <color name="yellow">#F6BE00</color>
+    <color name="green">#04EB0D</color>
 
 </resources>
