@@ -76,7 +76,11 @@ class AssignWorkFragment : Fragment() {
             val bossId = FirebaseAuth.getInstance().currentUser?.uid
             val workRoom = bossId + employeeId
 
+            val randomId = (1..20).map { (('A'..'Z') + ('a'..'z') + ('0'..'9')).random() }.joinToString("") // This code is created by chatGpt to create 20chr random id
+
+
             val work = Works(
+                workId = randomId,
                 workTitle = workTitle,
                 workDesc = workDescription,
                 workPriority = priority,
@@ -84,8 +88,9 @@ class AssignWorkFragment : Fragment() {
                 workStatus = "1"
             )
 
-            FirebaseDatabase.getInstance().getReference("Works").child(workRoom).push().setValue(work)
+            // FirebaseDatabase.getInstance().getReference("Works").child(workRoom).push().setValue(work) //>>> Ab push() ka use nhi kr he hai problem ho rha hai work complete krne me isliye isko hta diye
                 // Yha push()eak random id generate krta hai same employee ko alg alg work assign ho isliye iska use krte hai
+            FirebaseDatabase.getInstance().getReference("Works").child(workRoom).child(randomId).setValue(work)
                 .addOnSuccessListener {
                     Utils.apply {
                         hideDialog()

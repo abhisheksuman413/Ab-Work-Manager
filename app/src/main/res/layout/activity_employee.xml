@@ -19,18 +19,12 @@
         app:title="All Works"
         app:titleTextColor="@color/white" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="174dp"
-        android:layout_marginTop="294dp"
-        android:layout_marginEnd="179dp"
-        android:layout_marginBottom="418dp"
-        android:text="Employee"
-        android:textSize="20sp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvEmployeeAllWorks"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tbEmployeeAllWorks" />
 </androidx.constraintlayout.widget.ConstraintLayout>

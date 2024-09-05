@@ -39,7 +39,7 @@
        android:layout_gravity="bottom|end"
        app:layout_constraintBottom_toBottomOf="parent"
        app:layout_constraintEnd_toEndOf="parent"
-       android:src="@drawable/done_icon"
+       android:src="@drawable/baseline_add_24"
        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
