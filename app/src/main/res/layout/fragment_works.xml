@@ -21,21 +21,39 @@
         app:titleTextColor="#FFFFFF" />
 
     <androidx.recyclerview.widget.RecyclerView
+
         android:id="@+id/rvWork"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tbEmployeeAllWorks" />
+        app:layout_constraintTop_toBottomOf="@+id/tbEmployeeAllWorks"
+        app:layout_constraintVertical_bias="0.0" />
 
-   <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tvText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="No any work has been\nAssigned"
+        android:textColor="@color/HardBlue"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
        android:id="@+id/btnAssignWork"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_margin="21dp"
        android:backgroundTint="@color/HardBlue"
-       app:tint="#FFFFFF"
+       app:tint="@color/white"
        android:layout_gravity="bottom|end"
        app:layout_constraintBottom_toBottomOf="parent"
        app:layout_constraintEnd_toEndOf="parent"

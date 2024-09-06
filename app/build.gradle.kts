@@ -85,5 +85,9 @@ dependencies {
     implementation ("com.intuit.sdp:sdp-android:1.1.1")
 
 
+    // For Firebase messaging
+    implementation("com.google.firebase:firebase-messaging-ktx:23.2.1")
+
+
 
 }

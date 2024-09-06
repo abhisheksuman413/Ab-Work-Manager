@@ -7,6 +7,7 @@
     android:id="@+id/clDialog"
     android:padding="@dimen/_5sdp"
     android:layout_margin="@dimen/_5sdp"
+    android:background="@color/Light4"
     >
 
     <ImageView
@@ -61,3 +62,4 @@
         app:layout_constraintTop_toBottomOf="@+id/tvVerify" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Background Colors -->
+    <color name="black">#FF121212</color> <!-- Darker background for dark mode -->
+    <color name="white">#002A5D</color> <!-- Light gray text/background elements -->
+
+    <!-- Primary Colors -->
+    <color name="HardBlue">#FFE0E0E0</color> <!-- Darker shade of HardBlue -->
+    <color name="Medium">#001B4D</color> <!-- Darker shade of Medium -->
+
+    <!-- Secondary Colors -->
+    <color name="Light1">#005F8A</color> <!-- Darker variant of Light1 -->
+    <color name="Light2">#0079A9</color> <!-- Darker variant of Light2 -->
+    <color name="Light3">#0082C4</color> <!-- Darker variant of Light3 -->
+    <color name="Light4">#5E9BCC</color> <!-- Darker variant of Light4 -->
+    <color name="Light5">#8AB8D4</color> <!-- Darker variant of Light5 -->
+
+    <!-- Accents -->
+    <color name="red">#FF4040</color> <!-- Darker red for better visibility -->
+    <color name="yellow">#F6B800</color> <!-- Darker yellow for better visibility -->
+    <color name="green">#03D80B</color> <!-- Darker green for better visibility -->
+
+    <color name="transparent">#00000000</color>
+
+</resources>

@@ -10,5 +10,6 @@ data class Works(
     val workPriority : String? = null,
     val workLastDate : String? = null,
     val workStatus : String? = null,
-    var expanded : Boolean = false
+    var expanded : Boolean = false,
+    val bossId : String? = null
 )

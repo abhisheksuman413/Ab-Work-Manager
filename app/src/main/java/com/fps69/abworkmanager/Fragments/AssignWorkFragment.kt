@@ -85,7 +85,8 @@ class AssignWorkFragment : Fragment() {
                 workDesc = workDescription,
                 workPriority = priority,
                 workLastDate = workLastDate,
-                workStatus = "1"
+                workStatus = "1",
+                bossId = bossId
             )
 
             // FirebaseDatabase.getInstance().getReference("Works").child(workRoom).push().setValue(work) //>>> Ab push() ka use nhi kr he hai problem ho rha hai work complete krne me isliye isko hta diye

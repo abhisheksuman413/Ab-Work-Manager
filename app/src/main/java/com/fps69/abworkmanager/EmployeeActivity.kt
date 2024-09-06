@@ -2,6 +2,7 @@ package com.fps69.abworkmanager
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -56,33 +57,47 @@ class EmployeeActivity : AppCompatActivity() {
         val workRef = FirebaseDatabase.getInstance().getReference("Works")
         workRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                for (worksRooms in snapshot.children) {
-                    if (worksRooms.key?.contains(empId!!) == true) {
-                        val employeeWorkRef = workRef.child(worksRooms.key!!)
-                        employeeWorkRef.addValueEventListener(object : ValueEventListener {
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                val workList = ArrayList<Works>()
-                                for (allWorks in snapshot.children) {
-                                    val works = allWorks.getValue(Works::class.java)
-                                    if (works != null) {
-                                        workList.add(works)
+                if (snapshot.exists()) {
+                    binding.tvText.visibility = View.GONE
+                    for (worksRooms in snapshot.children) {
+                        if (worksRooms.key?.contains(empId!!) == true) {
+                            val employeeWorkRef = workRef.child(worksRooms.key!!)
+                            if (worksRooms.key!!.isEmpty()) {
+                                Utils.hideDialog()
+                                binding.tvText.visibility = View.VISIBLE
+                            } else {
+                                binding.tvText.visibility = View.GONE
+                                employeeWorkRef.addValueEventListener(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        val workList = ArrayList<Works>()
+                                        for (allWorks in snapshot.children) {
+                                            val works = allWorks.getValue(Works::class.java)
+                                            if (works != null) {
+                                                workList.add(works)
+                                            }
+                                        }
+                                        employeeActivityAllWorksAdapter.differ.submitList(workList)
+                                        Utils.hideDialog()
                                     }
-                                }
-                                employeeActivityAllWorksAdapter.differ.submitList(workList)
-                                Utils.hideDialog()
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Utils.hideDialog()
+                                        Utils.showToast(
+                                            this@EmployeeActivity,
+                                            "Something went wrong ${error.message}"
+                                        )
+                                    }
+
+                                })
                             }
 
-                            override fun onCancelled(error: DatabaseError) {
-                                Utils.hideDialog()
-                                Utils.showToast(
-                                    this@EmployeeActivity,
-                                    "Something went wrong ${error.message}"
-                                )
-                            }
-
-                        })
+                        }
                     }
+                } else {
+                    Utils.hideDialog()
+                    binding.tvText.visibility = View.VISIBLE
                 }
+
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -134,10 +149,6 @@ class EmployeeActivity : AppCompatActivity() {
             builder.setTitle("Starting Work ")
                 .setMessage("Are you Starting this work ")
                 .setPositiveButton("Yes") { _, _ ->
-                    startingButton.apply {
-                        text = "In Progress"
-                        setTextColor(ContextCompat.getColor(this@EmployeeActivity, R.color.Light5))
-                    }
                     updateWorkStatus(works, "2")
                 }
                 .setNegativeButton("No") { _, _ ->
@@ -198,10 +209,6 @@ class EmployeeActivity : AppCompatActivity() {
             builder.setTitle("Completed Work")
                 .setMessage("Have you Completed this work ")
                 .setPositiveButton("Yes") { _, _ ->
-                    completedButton.apply {
-                        text = "Work Completed"
-                        setTextColor(ContextCompat.getColor(this@EmployeeActivity, R.color.Light5))
-                    }
                     updateWorkStatus(works, "3")
                 }
                 .setNegativeButton("No") { _, _ ->

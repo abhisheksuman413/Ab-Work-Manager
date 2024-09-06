@@ -71,14 +71,21 @@ class  WorksFragment : Fragment() {
         FirebaseDatabase.getInstance().getReference("Works").child(workRoom)
             .addValueEventListener(object :ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val workList = ArrayList<Works>()
-                    for(allWorks in snapshot.children){
-                        val work = allWorks.getValue(Works::class.java)
-                        Log.d("WorksFragment", "Retrieved work: $work")
-                        workList.add(work!!)
+                    if (snapshot.exists()){
+                        binding.tvText.visibility= View.GONE
+                        val workList = ArrayList<Works>()
+                        for(allWorks in snapshot.children){
+                            val work = allWorks.getValue(Works::class.java)
+                            Log.d("WorksFragment", "Retrieved work: $work")
+                            workList.add(work!!)
+                        }
+                        worksAdapter.differ.submitList(workList)
+                        Utils.hideDialog()
+                    }else{
+                        Utils.hideDialog()
+                        binding.tvText.visibility= View.VISIBLE
                     }
-                    worksAdapter.differ.submitList(workList)
-                    Utils.hideDialog()
+
                 }
 
                 override fun onCancelled(error: DatabaseError) {

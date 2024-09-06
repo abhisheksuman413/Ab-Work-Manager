@@ -36,6 +36,8 @@
             app:argType="com.fps69.abworkmanager.dataclass.User" />
         <action
             android:id="@+id/action_assignWorkFragment_to_worksFragment"
-            app:destination="@id/worksFragment" />
+            app:destination="@id/worksFragment"
+            app:popUpTo="@id/worksFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

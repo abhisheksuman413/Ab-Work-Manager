@@ -96,14 +96,14 @@
                 android:padding="@dimen/_1sdp"
                 android:textStyle="bold"
                 android:textSize="@dimen/_15ssp"
-                android:textColor="@color/Medium"
+                android:textColor="@color/Light1"
                 />
             <TextView
                 android:id="@+id/tvWorkDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/_1sdp"
-                android:textColor="@color/Medium"
+                android:textColor="@color/Light1"
                 android:layout_marginStart="@dimen/_6sdp"
                 android:text="This is the description of the work "
                 />

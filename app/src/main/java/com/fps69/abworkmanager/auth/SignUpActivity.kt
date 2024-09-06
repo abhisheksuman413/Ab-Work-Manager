@@ -15,8 +15,10 @@ import com.fps69.abworkmanager.databinding.AccountVerificationDialogBinding
 import com.fps69.abworkmanager.databinding.ActivitySignUpBinding
 import com.fps69.abworkmanager.dataclass.User
 import com.fps69.abworkmanager.utils.Utils
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -115,58 +117,75 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
+
     private fun saveUserData(name: String, email: String, password: String, downlodeUrl: Uri?) {
-        lifecycleScope.launch {
-            val db = FirebaseDatabase.getInstance().getReference("User")
 
 
-            try {
-                val CurrentUser = FirebaseAuth.getInstance().currentUser
-                if (CurrentUser != null) {
-                    //For Email Verification
-                    FirebaseAuth.getInstance().currentUser?.sendEmailVerification()
-                        ?.addOnSuccessListener {
-                            val dialog =
-                                AccountVerificationDialogBinding.inflate(LayoutInflater.from(this@SignUpActivity))
-                            val alertDialog = AlertDialog.Builder(this@SignUpActivity)
-                                .setView(dialog.root)
-                                .create()
-                            Utils.hideDialog()
-                            alertDialog.show()
-                            dialog.btnDialogOk.setOnClickListener {
-                                alertDialog.dismiss()
-                                startActivity(
-                                    Intent(
-                                        this@SignUpActivity,
-                                        SignInActivity::class.java
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) return@OnCompleteListener
+
+            val token = task.result
+
+            lifecycleScope.launch {
+                val db = FirebaseDatabase.getInstance().getReference("User")
+
+
+                try {
+                    val CurrentUser = FirebaseAuth.getInstance().currentUser
+                    if (CurrentUser != null) {
+                        //For Email Verification
+                        FirebaseAuth.getInstance().currentUser?.sendEmailVerification()
+                            ?.addOnSuccessListener {
+                                val dialog =
+                                    AccountVerificationDialogBinding.inflate(
+                                        LayoutInflater.from(
+                                            this@SignUpActivity
+                                        )
                                     )
-                                )
-                                this@SignUpActivity.finish()
+                                val alertDialog = AlertDialog.Builder(this@SignUpActivity)
+                                    .setView(dialog.root)
+                                    .create()
+                                Utils.hideDialog()
+                                alertDialog.show()
+                                dialog.btnDialogOk.setOnClickListener {
+                                    alertDialog.dismiss()
+                                    startActivity(
+                                        Intent(
+                                            this@SignUpActivity,
+                                            SignInActivity::class.java
+                                        )
+                                    )
+                                    this@SignUpActivity.finish()
+                                }
                             }
-                        }
-                    val uId = CurrentUser.uid.toString()
-                    val saveUseType = if (userType == "Boss") "Boss" else "Employee"
-                    val user = User(
-                        userType = saveUseType,
-                        userId = uId,
-                        userName = name,
-                        userEmail = email,
-                        userPassword = password,
-                        userImage = downlodeUrl.toString()
-                    )
-                    db.child(uId).setValue(user).await()
-                    FirebaseAuth.getInstance().signOut()
-                    Utils.showToast(this@SignUpActivity, "SignUp Successfully")
+                        val uId = CurrentUser.uid.toString()
+                        val saveUseType = if (userType == "Boss") "Boss" else "Employee"
+                        val user = User(
+                            userType = saveUseType,
+                            userId = uId,
+                            userName = name,
+                            userEmail = email,
+                            userPassword = password,
+                            userImage = downlodeUrl.toString(),
+                            userToken = token
+                        )
+                        db.child(uId).setValue(user).await()
+                        FirebaseAuth.getInstance().signOut()
+                        Utils.showToast(this@SignUpActivity, "SignUp Successfully")
 
-                } else {
+                    } else {
+                        Utils.hideDialog()
+                        Utils.showToast(this@SignUpActivity, "SignUp Failed")
+                    }
+                } catch (e: Exception) {
                     Utils.hideDialog()
-                    Utils.showToast(this@SignUpActivity, "SignUp Failed")
+                    Utils.showToast(this@SignUpActivity, "SignUp Failed :- ${e.message}")
                 }
-            } catch (e: Exception) {
-                Utils.hideDialog()
-                Utils.showToast(this@SignUpActivity, "SignUp Failed :- ${e.message}")
             }
-        }
+
+
+        })
+
 
     }
 

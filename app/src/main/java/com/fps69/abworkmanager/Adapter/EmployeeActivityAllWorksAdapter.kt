@@ -1,5 +1,6 @@
 package com.fps69.abworkmanager.Adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,6 +62,7 @@ class EmployeeActivityAllWorksAdapter(
                 "2" -> ivOval.setImageResource(R.drawable.yellow_circle)
                 "3" -> ivOval.setImageResource(R.drawable.red_circle)
             }
+            Log.d("Abhi", "work status${works.workStatus}")
             when (works.workStatus) {
                 "1" -> {
                     tvStatus.text = "Pending"
@@ -83,11 +85,7 @@ class EmployeeActivityAllWorksAdapter(
             btnStarting.visibility = if (isExpanded) View.VISIBLE else View.GONE
             btnCompleted.visibility = if (isExpanded) View.VISIBLE else View.GONE
 
-            constraintLayout.setOnClickListener {
-                isAnyItemExpanded(position)
-                works.expanded = !works.expanded
-                notifyDataSetChanged() // Update entire list
-            }
+
             if(tvStatus.text == "In Progress" || tvStatus.text == "Completed"){
                 btnStarting.text = "In Progress"
                 btnStarting.setTextColor(holder.binding.root.context.getColor(R.color.Light5))
@@ -101,6 +99,11 @@ class EmployeeActivityAllWorksAdapter(
             }
             btnCompleted.setOnClickListener {
                 onCompletedButtonClicked(works,btnCompleted)
+            }
+            constraintLayout.setOnClickListener {
+                isAnyItemExpanded(position)
+                works.expanded = !works.expanded
+                notifyDataSetChanged() // Update entire list
             }
         }
     }

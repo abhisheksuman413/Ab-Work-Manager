@@ -120,7 +120,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="21dp"
         android:backgroundTint="@color/HardBlue"
-        app:tint="#FFFFFF"
+        app:tint="@color/white"
         android:layout_gravity="bottom|end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

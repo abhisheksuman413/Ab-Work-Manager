@@ -13,4 +13,7 @@
     <color name="yellow">#F6BE00</color>
     <color name="green">#04EB0D</color>
 
+
+    <color name="transparent">#00000000</color>
+
 </resources>
