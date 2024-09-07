@@ -40,6 +40,10 @@ android {
     buildFeatures{
         viewBinding =true
     }
+
+    packagingOptions {
+        exclude("META-INF/DEPENDENCIES")
+    }
 }
 
 dependencies {
@@ -51,6 +55,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.firebase.messaging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -86,7 +91,11 @@ dependencies {
 
 
     // For Firebase messaging
-    implementation("com.google.firebase:firebase-messaging-ktx:23.2.1")
+    implementation("com.google.firebase:firebase-messaging-ktx:24.0.1")
+
+
+
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.3.0")
 
 
 

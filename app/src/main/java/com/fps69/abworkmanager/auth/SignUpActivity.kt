@@ -126,6 +126,7 @@ class SignUpActivity : AppCompatActivity() {
 
             val token = task.result
 
+
             lifecycleScope.launch {
                 val db = FirebaseDatabase.getInstance().getReference("User")
 

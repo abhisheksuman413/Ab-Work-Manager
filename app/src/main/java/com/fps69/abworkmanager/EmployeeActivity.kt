@@ -1,17 +1,21 @@
 package com.fps69.abworkmanager
 
+import AccessToken
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fps69.abworkmanager.Adapter.EmployeeActivityAllWorksAdapter
 import com.fps69.abworkmanager.auth.SignInActivity
 import com.fps69.abworkmanager.databinding.ActivityEmployeeBinding
 import com.fps69.abworkmanager.dataclass.Works
 import com.fps69.abworkmanager.utils.Utils
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -19,6 +23,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.internal.Util
 
 class EmployeeActivity : AppCompatActivity() {
@@ -49,6 +56,27 @@ class EmployeeActivity : AppCompatActivity() {
             }
         }
 
+        initAutho2reciver()
+        firebasetoken()
+
+    }
+
+    private fun firebasetoken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) return@OnCompleteListener
+
+            val token = task.result
+            Log.d("Suman", " TokenAbhi :- ${token}")
+
+        })
+    }
+
+    private fun initAutho2reciver() {
+        val accessToken = AccessToken()
+        lifecycleScope.launch(Dispatchers.IO) {
+            var oathToken = accessToken.getAccessToken()
+            Log.d("Suman", " Token :- ${oathToken}")
+        }
     }
 
     private fun showEmployeeAllWorks() {

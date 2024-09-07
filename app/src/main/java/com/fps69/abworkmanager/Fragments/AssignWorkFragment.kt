@@ -4,19 +4,31 @@ import android.app.DatePickerDialog
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.fps69.abworkmanager.Api.ApiUtilities
 import com.fps69.abworkmanager.R
 import com.fps69.abworkmanager.databinding.FragmentAssignWorkBinding
+import com.fps69.abworkmanager.dataclass.Notification
+import com.fps69.abworkmanager.dataclass.NotificationData
+import com.fps69.abworkmanager.dataclass.User
 import com.fps69.abworkmanager.dataclass.Works
 import com.fps69.abworkmanager.utils.Utils
+import AccessToken
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.Locale
 
 
@@ -93,6 +105,7 @@ class AssignWorkFragment : Fragment() {
                 // Yha push()eak random id generate krta hai same employee ko alg alg work assign ho isliye iska use krte hai
             FirebaseDatabase.getInstance().getReference("Works").child(workRoom).child(randomId).setValue(work)
                 .addOnSuccessListener {
+                    initAuthReceiver(employeeId,workTitle)
                     Utils.apply {
                         hideDialog()
                         showToast(requireContext(),"Work has been assigned to : ${employeeData.employeeDetail.userName}")
@@ -100,6 +113,50 @@ class AssignWorkFragment : Fragment() {
                         findNavController().navigate(action)
                     }
                 }
+        }
+
+    }
+
+    private fun initAuthReceiver(employeeId: String?, workTitle: String) {
+        val accessToken = AccessToken()
+        lifecycleScope.launch (Dispatchers.IO){
+            val oathToken = accessToken.getAccessToken()
+            Log.d("Suman","AssineWork fragment : ${oathToken}")
+            if(oathToken!=null){
+                val authHeader = "Bearer $oathToken"
+                sendNotification(employeeId, workTitle, authHeader)
+            }
+        }
+
+
+    }
+
+    private fun sendNotification(employeeId: String?, workTitle: String,authHeader:String) {
+        val employeeDataSnapshot = FirebaseDatabase.getInstance().getReference("User").child(employeeId!!).get()
+        employeeDataSnapshot.addOnSuccessListener {
+            val employeeData = it.getValue(User::class.java)
+            val employeeToken = employeeData?.userToken
+
+            val notification = Notification(employeeToken, NotificationData("Work Assigned ", workTitle))
+            val apiCall= ApiUtilities.api.sendNotification(authHeader,notification)
+
+            apiCall.request().newBuilder().addHeader("Authorization",authHeader).build()
+
+            apiCall.enqueue(object : Callback<Notification>{
+                override fun onResponse(
+                    call: Call<Notification>,
+                    response: Response<Notification>
+                ) {
+                    if(response.isSuccessful){
+                        Log.d("Suman","Notification sent")
+                    }
+                }
+
+                override fun onFailure(call: Call<Notification>, t: Throwable) {
+                    Log.e("Suman", "Failed to send notification: ${t.message}")
+                }
+
+            })
         }
 
     }
