@@ -2,8 +2,11 @@ package com.fps69.abworkmanager.Api
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import androidx.core.app.NotificationCompat
+import com.fps69.abworkmanager.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import kotlin.random.Random
 
 class NotificationService : FirebaseMessagingService(){
 
@@ -15,6 +18,18 @@ class NotificationService : FirebaseMessagingService(){
         val manager = getSystemService(NOTIFICATION_SERVICE)
         // Creating channel
         createNotificationChannel(manager as NotificationManager)
+
+
+        val notification = NotificationCompat.Builder(this, chanelID)
+            .setContentTitle(message.data["title"])
+            .setContentText(message.data["body"])
+            .setSmallIcon(R.drawable.red_circle)
+            .setAutoCancel(false)
+            .setContentIntent(null)
+            .build()
+
+
+        manager.notify(Random.nextInt(),notification)
     }
 
     private fun createNotificationChannel(manager: NotificationManager) {
@@ -22,6 +37,7 @@ class NotificationService : FirebaseMessagingService(){
             .apply {
                 description = "New Work"
                 enableLights(true)
+                enableVibration(true)
             }
         manager.createNotificationChannel(chanel)
     }

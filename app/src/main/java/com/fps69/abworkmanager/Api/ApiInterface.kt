@@ -1,5 +1,6 @@
 package com.fps69.abworkmanager.Api
 
+import com.fps69.abworkmanager.dataclass.FcmMessage
 import com.fps69.abworkmanager.dataclass.Notification
 import retrofit2.Call
 import retrofit2.http.Body
@@ -16,7 +17,7 @@ interface ApiInterface {
     @POST("/v1/projects/ab-work-manager/messages:send")
     fun sendNotification(
         @Header("Authorization") authHeader: String,
-        @Body notification: Notification
-    ): Call<Notification>
+        @Body message: FcmMessage
+    ): Call<Void>
 
 }

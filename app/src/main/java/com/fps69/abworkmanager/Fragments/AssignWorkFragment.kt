@@ -16,12 +16,15 @@ import androidx.navigation.fragment.navArgs
 import com.fps69.abworkmanager.Api.ApiUtilities
 import com.fps69.abworkmanager.R
 import com.fps69.abworkmanager.databinding.FragmentAssignWorkBinding
+import com.fps69.abworkmanager.dataclass.FcmMessage
+import com.fps69.abworkmanager.dataclass.Message
 import com.fps69.abworkmanager.dataclass.Notification
+import com.fps69.abworkmanager.dataclass.NotificationContent
 import com.fps69.abworkmanager.dataclass.NotificationData
 import com.fps69.abworkmanager.dataclass.User
 import com.fps69.abworkmanager.dataclass.Works
 import com.fps69.abworkmanager.utils.Utils
-import AccessToken
+import com.fps69.abworkmanager.utils.AccessToken
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
@@ -137,22 +140,31 @@ class AssignWorkFragment : Fragment() {
             val employeeData = it.getValue(User::class.java)
             val employeeToken = employeeData?.userToken
 
-            val notification = Notification(employeeToken, NotificationData("Work Assigned ", workTitle))
-            val apiCall= ApiUtilities.api.sendNotification(authHeader,notification)
+            val notificationContent  = NotificationContent("Work Assigned", workTitle)
+            val message = Message(
+                token = employeeToken,
+                notification = notificationContent,
+                data = mapOf("title" to "Work Assigned", "body" to workTitle)
+            )
 
-            apiCall.request().newBuilder().addHeader("Authorization",authHeader).build()
+            val fcmMessage = FcmMessage(message)
 
-            apiCall.enqueue(object : Callback<Notification>{
+
+            val apiCall= ApiUtilities.api.sendNotification(authHeader,fcmMessage)
+
+            apiCall.enqueue(object : Callback<Void>{
                 override fun onResponse(
-                    call: Call<Notification>,
-                    response: Response<Notification>
+                    call: Call<Void>,
+                    response: Response<Void>
                 ) {
                     if(response.isSuccessful){
                         Log.d("Suman","Notification sent")
+                    } else {
+                        Log.e("Suman", "Notification send failed: ${response.errorBody()?.string()}")
                     }
                 }
 
-                override fun onFailure(call: Call<Notification>, t: Throwable) {
+                override fun onFailure(call: Call<Void>, t: Throwable) {
                     Log.e("Suman", "Failed to send notification: ${t.message}")
                 }
 
