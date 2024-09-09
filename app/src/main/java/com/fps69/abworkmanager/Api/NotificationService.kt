@@ -10,7 +10,6 @@ import kotlin.random.Random
 
 class NotificationService : FirebaseMessagingService(){
 
-
     var chanelID ="AbWorkManager"
 
     override fun onMessageReceived(message: RemoteMessage) {

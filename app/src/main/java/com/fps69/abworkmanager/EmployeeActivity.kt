@@ -11,8 +11,13 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fps69.abworkmanager.Adapter.EmployeeActivityAllWorksAdapter
+import com.fps69.abworkmanager.Api.ApiUtilities
 import com.fps69.abworkmanager.auth.SignInActivity
 import com.fps69.abworkmanager.databinding.ActivityEmployeeBinding
+import com.fps69.abworkmanager.dataclass.FcmMessage
+import com.fps69.abworkmanager.dataclass.Message
+import com.fps69.abworkmanager.dataclass.NotificationContent
+import com.fps69.abworkmanager.dataclass.User
 import com.fps69.abworkmanager.dataclass.Works
 import com.fps69.abworkmanager.utils.AccessToken
 import com.fps69.abworkmanager.utils.Utils
@@ -29,6 +34,9 @@ import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.internal.Util
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class EmployeeActivity : AppCompatActivity() {
 
@@ -58,27 +66,6 @@ class EmployeeActivity : AppCompatActivity() {
             }
         }
 
-        initAutho2reciver()
-        firebasetoken()
-
-    }
-
-    private fun firebasetoken() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) return@OnCompleteListener
-
-            val token = task.result
-            Log.d("Suman", " TokenAbhi :- ${token}")
-
-        })
-    }
-
-    private fun initAutho2reciver() {
-        val accessToken = AccessToken()
-        lifecycleScope.launch(Dispatchers.IO) {
-            var oathToken = accessToken.getAccessToken()
-            Log.d("Suman", " Token :- ${oathToken}")
-        }
     }
 
     private fun showEmployeeAllWorks() {
@@ -87,6 +74,7 @@ class EmployeeActivity : AppCompatActivity() {
         val workRef = FirebaseDatabase.getInstance().getReference("Works")
         workRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                val workList = ArrayList<Works>()
                 if (snapshot.exists()) {
                     binding.tvText.visibility = View.GONE
                     for (worksRooms in snapshot.children) {
@@ -99,7 +87,7 @@ class EmployeeActivity : AppCompatActivity() {
                                 binding.tvText.visibility = View.GONE
                                 employeeWorkRef.addValueEventListener(object : ValueEventListener {
                                     override fun onDataChange(snapshot: DataSnapshot) {
-                                        val workList = ArrayList<Works>()
+
                                         for (allWorks in snapshot.children) {
                                             val works = allWorks.getValue(Works::class.java)
                                             if (works != null) {
@@ -127,7 +115,6 @@ class EmployeeActivity : AppCompatActivity() {
                     Utils.hideDialog()
                     binding.tvText.visibility = View.VISIBLE
                 }
-
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -240,6 +227,7 @@ class EmployeeActivity : AppCompatActivity() {
                 .setMessage("Have you Completed this work ")
                 .setPositiveButton("Yes") { _, _ ->
                     updateWorkStatus(works, "3")
+                    initAuthReceiver(works.bossId, works.workTitle.toString())
                 }
                 .setNegativeButton("No") { _, _ ->
                     alertDialog.dismiss()
@@ -249,4 +237,58 @@ class EmployeeActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun initAuthReceiver(bossID: String?, workTitle: String) {
+        val accessToken = AccessToken()
+        lifecycleScope.launch(Dispatchers.IO) {
+            val oathToken = accessToken.getAccessToken()
+            Log.d("Suman", "AssineWork fragment : ${oathToken}")
+            if (oathToken != null) {
+                val authHeader = "Bearer $oathToken"
+                sendNotification(bossID, workTitle, authHeader)
+            }
+        }
+    }
+
+
+    private fun sendNotification(bossID: String?, workTitle: String,authHeader:String) {
+        val bossDataSnapshot = FirebaseDatabase.getInstance().getReference("User").child(bossID!!).get()
+     bossDataSnapshot.addOnSuccessListener {
+            val bossData = it.getValue(User::class.java)
+            val bossToken = bossData?.userToken
+
+            val notificationContent  = NotificationContent("Work Completed", workTitle)
+            val message = Message(
+                token = bossToken,
+                notification = notificationContent,
+                data = mapOf("title" to "Work Completed", "body" to workTitle)
+            )
+
+            val fcmMessage = FcmMessage(message)
+
+
+            val apiCall= ApiUtilities.api.sendNotification(authHeader,fcmMessage)
+
+            apiCall.enqueue(object : Callback<Void> {
+                override fun onResponse(
+                    call: Call<Void>,
+                    response: Response<Void>
+                ) {
+                    if(response.isSuccessful){
+                        Log.d("Suman","Notification sent")
+                    } else {
+                        Log.e("Suman", "Notification send failed: ${response.errorBody()?.string()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.e("Suman", "Failed to send notification: ${t.message}")
+                }
+
+            })
+        }
+
+    }
+
+
 }

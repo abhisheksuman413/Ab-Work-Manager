@@ -66,16 +66,22 @@ class EmployeeActivityAllWorksAdapter(
             when (works.workStatus) {
                 "1" -> {
                     tvStatus.text = "Pending"
+                    btnStarting.text="Starting"
+                    btnCompleted.text="Complete"
                     tvStatus.setTextColor(holder.binding.root.context.getColor(R.color.red))
                 }
 
                 "2" -> {
                     tvStatus.text = "In Progress"
+                    btnStarting.text="In Progress"
+                    btnCompleted.text="Complete"
                     tvStatus.setTextColor(holder.binding.root.context.getColor(R.color.yellow))
                 }
 
                 "3" -> {
                     tvStatus.text = "Completed"
+                    btnStarting.text="In Progress"
+                    btnCompleted.text="Work Completed"
                     tvStatus.setTextColor(holder.binding.root.context.getColor(R.color.green))
                 }
             }
@@ -85,20 +91,22 @@ class EmployeeActivityAllWorksAdapter(
             btnStarting.visibility = if (isExpanded) View.VISIBLE else View.GONE
             btnCompleted.visibility = if (isExpanded) View.VISIBLE else View.GONE
 
-
-            if(tvStatus.text == "In Progress" || tvStatus.text == "Completed"){
-                btnStarting.text = "In Progress"
-                btnStarting.setTextColor(holder.binding.root.context.getColor(R.color.Light5))
-            }
-            if(tvStatus.text == "Completed"){
-                btnCompleted.text = "Work Completed"
-                btnStarting.setTextColor(holder.binding.root.context.getColor(R.color.Light5))
-            }
+// Isko while loop me manage kr liya hai
+//            if(tvStatus.text == "In Progress" || tvStatus.text == "Completed"){
+//                btnStarting.text = "In Progress"
+//                btnStarting.setTextColor(holder.binding.root.context.getColor(R.color.Light5))
+//            }
+//            if(tvStatus.text == "Completed"){
+//                btnCompleted.text = "Work Completed"
+//                btnStarting.setTextColor(holder.binding.root.context.getColor(R.color.Light5))
+//            }
             btnStarting.setOnClickListener {
                 onStartingButtonClicked(works,btnStarting)
+//                notifyDataSetChanged()
             }
             btnCompleted.setOnClickListener {
                 onCompletedButtonClicked(works,btnCompleted)
+//                notifyDataSetChanged()
             }
             constraintLayout.setOnClickListener {
                 isAnyItemExpanded(position)
