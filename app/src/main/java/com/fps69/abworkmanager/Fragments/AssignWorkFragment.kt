@@ -128,6 +128,7 @@ class AssignWorkFragment : Fragment() {
             if(oathToken!=null){
                 val authHeader = "Bearer $oathToken"
                 sendNotification(employeeId, workTitle, authHeader)
+                Log.d("cheack","employeeId :- ${employeeId}, workTitle :- ${workTitle}, authHeader :- ${authHeader}")
             }
         }
 
