@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/HardBlue"
+    android:background="@color/Light4"
     tools:context=".auth.SplashScreenActivity">
 
     <TextView
@@ -24,7 +24,7 @@
     <ImageView
         android:layout_width="260dp"
         android:layout_height="260dp"
-        android:src="@drawable/splash"
+        android:src="@drawable/sp"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

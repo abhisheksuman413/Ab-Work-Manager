@@ -96,6 +96,7 @@ class EmployeeActivity : AppCompatActivity() {
                                         }
                                         employeeActivityAllWorksAdapter.differ.submitList(workList)
                                         Utils.hideDialog()
+                                        binding.tvText.visibility = View.GONE
                                     }
 
                                     override fun onCancelled(error: DatabaseError) {
@@ -109,6 +110,10 @@ class EmployeeActivity : AppCompatActivity() {
                                 })
                             }
 
+                        }
+                        else{
+                            Utils.hideDialog()
+                            binding.tvText.visibility = View.VISIBLE
                         }
                     }
                 } else {

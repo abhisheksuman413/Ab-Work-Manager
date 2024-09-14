@@ -128,7 +128,7 @@ class AssignWorkFragment : Fragment() {
             if(oathToken!=null){
                 val authHeader = "Bearer $oathToken"
                 sendNotification(employeeId, workTitle, authHeader)
-                Log.d("cheack","employeeId :- ${employeeId}, workTitle :- ${workTitle}, authHeader :- ${authHeader}")
+
             }
         }
 
@@ -147,6 +147,7 @@ class AssignWorkFragment : Fragment() {
                 notification = notificationContent,
                 data = mapOf("title" to "Work Assigned", "body" to workTitle)
             )
+            Log.d("cheack","employeeToken :- ${employeeToken}, notificationContent :- ${notificationContent}")
 
             val fcmMessage = FcmMessage(message)
 
