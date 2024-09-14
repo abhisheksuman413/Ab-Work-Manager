@@ -13,7 +13,7 @@ This is a comprehensive Android application developed using Kotlin, designed to 
   <img src="https://github.com/abhisheksuman413/Ab-Work-Manager/blob/master/Screenshot/3.jpg" alt="Light Mode Screenshot 1" width="200" />
   <img src="https://github.com/abhisheksuman413/Ab-Work-Manager/blob/master/Screenshot/4.jpg" alt="Light Mode Screenshot 1" width="200" />
   <img src="https://github.com/abhisheksuman413/Ab-Work-Manager/blob/master/Screenshot/5.jpg" alt="Light Mode Screenshot 1" width="200" />
-  <img src="https://github.com/abhisheksuman413/Ab-Work-Manager/blob/master/Screenshot/6.jpg" alt="Light Mode Screenshot 1" width="200" />
+  <img src="https://github.com/abhisheksuman413/Ab-Work-Manager/blob/master/Screenshot/66.jpg" alt="Light Mode Screenshot 1" width="200" />
   <img src="https://github.com/abhisheksuman413/Ab-Work-Manager/blob/master/Screenshot/7.jpg" alt="Light Mode Screenshot 1" width="200" />
   <img src="https://github.com/abhisheksuman413/Ab-Work-Manager/blob/master/Screenshot/8.jpg" alt="Light Mode Screenshot 1" width="200" />
   <img src="https://github.com/abhisheksuman413/Ab-Work-Manager/blob/master/Screenshot/9.jpg" alt="Light Mode Screenshot 1" width="200" />
